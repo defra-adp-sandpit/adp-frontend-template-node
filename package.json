@@ -1,0 +1,62 @@
+{
+  "name": "adp-frontend-template-node",
+  "version": "0.0.1",
+  "description": "Proof of concept FFD frontend",
+  "homepage": "github.com?owner=defra&repo=adp-frontend-template-node&organization=defra",
+  "main": "app/index.js",
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "pretest": "npm run test:lint",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --coverage=false --onlyChanged --watch --runInBand",
+    "test:lint": "standard",
+    "test:debug": "node --inspect-brk=0.0.0.0 ./node_modules/jest/bin/jest.js --coverage=false --onlyChanged --watch --runInBand --no-cache",
+    "start:watch": "nodemon --inspect=0.0.0.0 --ext js --legacy-watch app/index.js",
+    "start:debug": "nodemon --inspect-brk=0.0.0.0 --ext js --legacy-watch app/index.js"
+  },
+  "author": "Defra",
+  "contributors": [],
+  "license": "OGL-UK-3.0",
+  "dependencies": {
+    "@hapi/hapi": "21.3.2",
+    "@hapi/inert": "7.1.0",
+    "@hapi/vision": "7.0.3",
+    "applicationinsights": "2.8.0",
+    "govuk-frontend": "4.7.0",
+    "nunjucks": "3.2.4"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "jest-junit": "16.0.0",
+    "nodemon": "3.0.1",
+    "standard": "17.1.0",
+    "clean-webpack-plugin": "4.0.0",
+    "css-loader": "6.8.1",
+    "html-webpack-plugin": "5.5.3",
+    "mini-css-extract-plugin": "2.7.6",
+    "resolve-url-loader": "5.0.0",
+    "sass": "1.67.0",
+    "sass-loader": "13.3.2",
+    "style-loader": "3.3.3",
+    "webpack": "5.88.2",
+    "webpack-cli": "5.1.4"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "beforeEach",
+      "expect",
+      "test",
+      "afterEach",
+      "jest",
+      "beforeAll",
+      "afterAll"
+    ]
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/test-output/**"
+    ]
+  }
+}

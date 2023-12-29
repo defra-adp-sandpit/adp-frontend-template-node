@@ -1,0 +1,3 @@
+services:
+  adp-frontend-template-node:
+    command: npm run start:debug

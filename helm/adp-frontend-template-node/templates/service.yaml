@@ -1,0 +1,4 @@
+{{- include "adp-helm-library.cluster-ip-service" (list . "adp-frontend-template-node.cluster-ip-service") -}}
+{{- define "adp-frontend-template-node.cluster-ip-service" -}}
+{{- end -}}
+

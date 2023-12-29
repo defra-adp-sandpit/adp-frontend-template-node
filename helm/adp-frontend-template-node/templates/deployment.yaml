@@ -1,0 +1,8 @@
+{{- include "adp-helm-library.deployment" (list . "adp-frontend-template-node.deployment") -}}
+{{- define "adp-frontend-template-node.deployment" -}}
+spec:
+  template:
+    spec:
+      containers:
+      - {{ include "adp-helm-library.container" (list . "adp-frontend-template-node.container") }}
+{{- end -}}
