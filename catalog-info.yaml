@@ -1,0 +1,40 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "adp-frontend-template-node"
+  description: |
+    Template to support rapid delivery of microservices for ADP Platform. It contains the configuration needed to deploy a simple Hapi Node server to the Azure Kubernetes Platform.
+  annotations:
+    github.com/project-slug: DEFRA/adp-frontend-template-node
+    dev.azure.com/project: DEFRA-ADP
+    dev.azure.com/build-definition: DEFRA.adp-frontend-template-node
+    sonarqube.org/project-key: adp-frontend-template-node
+    backstage.io/techdocs-ref: url:https://dev.azure.com/defragovuk/DEFRA-FFC/_wiki/wikis/DEFRA-FFC.wiki/15258/Demo-Service
+  tags:
+    - node
+    - service-bus
+    - external
+    - front-end
+spec:
+  type: frontend
+  lifecycle: beta
+  owner: "group:default/adp-demo"
+  system: adp-frontend-template-node
+  dependsOn:
+    - "resource:default/adp-backend-queue"
+    - "resource:default/ADPINFSB01"
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: adp-backend-queue
+  description: Backend message queue
+  tags:
+    - azure-service-bus
+    - queue
+spec:
+  type: message-queue
+  owner: "group:default/adp-demo"
+  system: adp-frontend-template-node
+  dependsOn: 
+    - "resource:default/ADPINFSB01"
