@@ -21,13 +21,13 @@ spec:
   owner: "group:default/adp-demo"
   system: adp-frontend-template-node
   dependsOn:
-    - "resource:default/adp-backend-queue"
+    - "resource:default/adp-demo-backend-queue"
     - "resource:default/ADPINFSB01"
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: adp-backend-queue
+  name: adp-demo-backend-queue
   description: Backend message queue
   tags:
     - azure-service-bus
