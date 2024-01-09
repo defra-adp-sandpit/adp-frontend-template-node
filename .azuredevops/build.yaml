@@ -4,7 +4,6 @@ parameters:
   type: boolean
   default: false
 
-
 pr:
   branches:
     include:
@@ -50,6 +49,7 @@ extends:
       testFilePath: "./docker-compose.test.yaml"
     appDeployConfig:
       filepath: "./appConfig"  
+      filetype: "yaml"
       variableGroups: 
         - adp-frontend-template-node-snd1
         - adp-frontend-template-node-snd2
