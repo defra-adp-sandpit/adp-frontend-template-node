@@ -47,7 +47,7 @@ The application is designed to run in containerised environments, using Docker C
 Container images are built using Docker Compose, with the same images used to run the service with either Docker Compose or Kubernetes.
 
 When using the Docker Compose files in development the local `app` folder will
-be mounted on top of the `app` folder within the Docker container, hiding the CSS files that were generated during the Docker build.  For the site to render correctly locally `npm run build` must be run on the host system.
+be mounted on top of the `app` folder within the Docker container, hiding the CSS files that were generated during the Docker build.  For the site to render correctly locally `npm run build` must be run on the host system. This will run `webpack` build and prevents `_layout.njk` file being replaced by volume mapping in `docker-compose.override.yaml`.
 
 
 By default, the start script will build (or rebuild) images so there will
@@ -93,7 +93,19 @@ scripts/test -w
 
 ## CI pipeline
 
-This service uses the ADP CI pipeline
+This service uses the ADP CI pipeline.
+
+### AppConfig - KeyVault References
+If the application uses `keyvault references` in `appConfig.env.yaml`, please make sure the variable to be added to keyvault is created in ADO Library variable groups and the reference for the variable groups and variables are provided in `build.yaml` like below.
+
+```
+variableGroups: 
+    - ${{ values.project_name }}-snd1
+    - ${{ values.project_name }}-snd2
+    - ${{ values.project_name }}-snd3
+variables:
+    - ${{ values.project_name }}-APPINSIGHTS-CONNECTIONSTRING
+```
 
 ## Licence
 
