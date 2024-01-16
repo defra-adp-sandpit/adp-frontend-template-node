@@ -39,7 +39,7 @@ extends:
   parameters:
     projectName: "adp-frontend-template-node"
     serviceName: "adp-frontend-template-node"
-    deployFromFeature: ${{ parameters.deployFromFeature }}
+    deployFromFeature: {% raw %}${{ parameters.deployFromFeature }}{% endraw %}
     appBuildConfig:
       appFrameworkType: "nodejs"    
       projectPath: "./package.json"

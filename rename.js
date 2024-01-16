@@ -122,18 +122,24 @@ async function renameDirs (projectName) {
   await fs.promises.rename(originalInfraHelmDir, `./helm/${projectName}-infra`)
 }
 
+function getViewFiles(){
+  return ['./app/views/home.njk']
+}
+
 async function updateProjectName (projectName, namespace) {
   const rootFiles = getRootFiles()
   const buildYaml = getCIpipelineFile()
   const helmFiles = await getHelmFiles(projectName)
   const infraHelmFiles = await getInfraHelmFiles(projectName)
   const scriptFiles = await getScriptFiles()
+  const viewFiles = getViewFiles()
   const filesToUpdate = [
     ...rootFiles,
     ...helmFiles,
     ...infraHelmFiles,
     ...scriptFiles,
-    ...buildYaml
+    ...buildYaml,
+    ...viewFiles
   ]
   const ns = getNamespace(projectName, namespace)
 

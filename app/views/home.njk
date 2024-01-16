@@ -1,3 +1,4 @@
+{% raw %}
 {% extends '_layout.njk' %}
 
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
@@ -17,14 +18,15 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">FFC FFD Frontend POC</h1>
+{% endraw %}
+      <h1 class="govuk-heading-xl">adp-frontend-template-node</h1>
 
       <p class="govuk-body">
         This is a demo application for the technical investigation of patterns and practices
         in developing production quality containerised, cloud native, microservice based applications
-        within the Future Farming and Countryside Programme (FFC).
+        within the adp-frontend-template-node.
       </p>
-
+{% raw %}
       {{ govukWarningText({
         text: "This is not a real service and is for demonstration and investigation purposes only.",
         iconFallbackText: "Warning"
@@ -54,3 +56,4 @@
     </div>
   </div>
 {% endblock %}
+{% endraw %}
