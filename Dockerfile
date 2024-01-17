@@ -5,7 +5,7 @@ ARG PORT_DEBUG=9229
 # Development
 FROM defradigital/node-development:${PARENT_VERSION} AS development
 ARG PARENT_VERSION
-LABEL uk.gov.defra.ffc.parent-image=defradigital/node-development:${PARENT_VERSION}
+LABEL uk.gov.defra.adp.parent-image=defradigital/node-development:${PARENT_VERSION}
 ARG PORT
 ENV PORT ${PORT}
 ARG PORT_DEBUG
@@ -20,7 +20,7 @@ CMD [ "npm", "run", "start:watch" ]
 FROM defradigital/node:${PARENT_VERSION} AS production
 ARG PARENT_VERSION
 ARG REGISTRY
-LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
+LABEL uk.gov.defra.adp.parent-image=defradigital/node:${PARENT_VERSION}
 ARG PORT
 ENV PORT ${PORT}
 EXPOSE ${PORT}

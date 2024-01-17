@@ -122,8 +122,8 @@ async function renameDirs (projectName) {
   await fs.promises.rename(originalInfraHelmDir, `./helm/${projectName}-infra`)
 }
 
-function getViewFiles(){
-  return ['./app/views/home.njk']
+function getAppFiles(){
+  return ['./app/views/home.njk', './app/plugins/views.js']
 }
 
 async function updateProjectName (projectName, namespace) {
@@ -132,7 +132,7 @@ async function updateProjectName (projectName, namespace) {
   const helmFiles = await getHelmFiles(projectName)
   const infraHelmFiles = await getInfraHelmFiles(projectName)
   const scriptFiles = await getScriptFiles()
-  const viewFiles = getViewFiles()
+  const viewFiles = getAppFiles()
   const filesToUpdate = [
     ...rootFiles,
     ...helmFiles,

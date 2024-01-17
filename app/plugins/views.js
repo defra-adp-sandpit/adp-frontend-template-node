@@ -32,8 +32,8 @@ module.exports = {
       appVersion: pkg.version,
       assetPath: '/static',
       govukAssetPath: '/assets',
-      serviceName: 'FFC FFD Frontend POC',
-      pageTitle: 'FFC FFD Frontend POC - GOV.UK'
+      serviceName: 'adp-frontend-template-node',
+      pageTitle: 'adp-frontend-template-node - GOV.UK'
     }
   }
 }
