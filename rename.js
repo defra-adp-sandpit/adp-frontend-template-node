@@ -40,7 +40,7 @@ function processInput (args) {
       )
       process.exit(1)
     }
-    return { description, projectName, namespace }
+    return { description, projectName, namespace, tokenize }
   }
 }
 
@@ -96,7 +96,7 @@ function getRootFiles () {
   return ['docker-compose.yaml', 'docker-compose.override.yaml', 'docker-compose.debug.yaml', 'docker-compose.test.yaml', 'docker-compose.test.watch.yaml', 'docker-compose.test.debug.yaml', 'package.json', 'package-lock.json', 'catalog-info.yaml']
 }
 
-function getCIpipelineFile(){
+function getCIpipelineFile () {
   return ['./.azuredevops/build.yaml']
 }
 
@@ -122,7 +122,7 @@ async function renameDirs (projectName) {
   await fs.promises.rename(originalInfraHelmDir, `./helm/${projectName}-infra`)
 }
 
-function getAppFiles(){
+function getAppFiles () {
   return ['./app/views/home.njk', './app/plugins/views.js']
 }
 
@@ -188,14 +188,43 @@ async function updateReadme (projectName, description) {
   console.log(`${file} update completed`)
 }
 
+function getRawTokenFiles () {
+  return ['./app/views/home.njk', './app/views/_layout.template.njk', './.azuredevops/build.yaml']
+}
+async function removeRawTokens () {
+  const filesToUpdate = getRawTokenFiles()
+  console.log(
+    'Removing raw tokens in...'
+  )
+  await Promise.all(
+    filesToUpdate.map(async (file) => {
+      console.log(file)
+      const content = await fs.promises.readFile(file, 'utf8')
+      const rawToken = '{% raw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}'
+      const endRawToken = '{% endraw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}'
+      const rawRegex = new RegExp(rawToken, 'g')
+      const endRawRegex = new RegExp(endRawToken, 'g')
+      const updatedContent = content
+        .replace(rawRegex, '')
+        .replace(endRawRegex, '')
+      return fs.promises.writeFile(file, updatedContent)
+    })
+  )
+  console.log('Completed raw token removal.')
+}
+
 async function rename () {
-  const { description, projectName, namespace } = processInput(process.argv)
+  const { description, projectName, namespace, tokenize } = processInput(process.argv)
+  console.log('Tokenize: ', tokenize)
   const rename = await confirmRename(projectName, description)
   if (rename) {
     await renameDirs(projectName)
     await updateProjectName(projectName, namespace)
     await updateProjectDescription(projectName, description)
     await updateReadme(projectName, description)
+    if (!tokenize) {
+      await removeRawTokens()
+    }
   } else {
     console.log('Project has not been renamed.')
   }
