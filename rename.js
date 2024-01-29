@@ -201,7 +201,7 @@ async function removeRawTokens () {
       console.log(file)
       const content = await fs.promises.readFile(file, 'utf8')
       const rawToken = '{% raw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}'
-      const endRawToken = '{% endraw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}'
+      const endRawToken = '{% endraw %}'
       const rawRegex = new RegExp(rawToken, 'g')
       const endRawRegex = new RegExp(endRawToken, 'g')
       const updatedContent = content
