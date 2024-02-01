@@ -1,4 +1,3 @@
-{% raw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}
 {% extends "govuk/template.njk" %}
 
 {% block head %}
@@ -22,11 +21,11 @@
 
 {% block header %}
   {{ govukHeader({
-    homepageUrl: "https://www.gov.uk/",
-    containerClasses: "govuk-width-container",
-    serviceName: serviceName,
-    serviceUrl: "/"
-  }) }}
+      homepageUrl: "https://www.gov.uk/",
+      containerClasses: "govuk-width-container",
+      serviceName: serviceName,
+      serviceUrl: "/"
+    }) }}
 {% endblock %}
 
 {% block pageTitle %}
@@ -47,4 +46,3 @@
   <script src="<%= file.replace('../dist/', '/static/') %>"></script>
 <% }) %>
 {% endblock %}
-{% endraw %}
