@@ -10,29 +10,33 @@ const originalHelmDir = './helm/adp-frontend-template-node'
 const originalInfraHelmDir = './helm/adp-frontend-template-node-infra'
 
 function processInput (args) {
-  const [, , projectName, description, tokenize, namespace] = args
+  const [, , projectName, description, frontendType, tokenize, namespace] = args
   if (args.length === 2) {
     console.error(
-      'Please enter a new name and description for the project e.g. ffc-demo-claim-service "Backend for demo workstream".'
+      'Please enter a new name and description for the project e.g. ffc-demo-web-internal "Frontend for demo workstream".'
     )
     process.exit(1)
   }
   if (!tokenize) {
     if (
-      args.length !== 4 ||
+      args.length !== 5 ||
       !projectName ||
       projectName.split('-').length < 3 ||
       !description
     ) {
       const errMsg = [
-        'Please enter a new name and description for the project.',
-        'The name must contain two hypens and be of the form "<program>-<worksream>-<repo>" e.g. "ffc-demo-claim-service".',
+        'Please enter a new name, description and frontend type (internal/external) for the project.',
+        'The name must contain two hypens and be of the form "<program>-<worksream>-<repo>" e.g. "ffc-demo-web-internal".',
         'The description must not be empty and be wrapped in quotes e.g. "excellent new description".'
       ]
       console.error(errMsg.join('\n'))
       process.exit(1)
     }
-    return { description, projectName }
+    let appType = frontendType.toLowerCase()
+    if (appType !== 'internal' && appType !== 'external') {
+      appType = 'external'
+    }
+    return { description, projectName, appType }
   } else {
     if (!namespace) {
       console.error(
@@ -40,7 +44,8 @@ function processInput (args) {
       )
       process.exit(1)
     }
-    return { description, projectName, namespace, tokenize }
+    const appType = 'scaffolder'
+    return { description, projectName, namespace, tokenize, appType }
   }
 }
 
@@ -189,7 +194,7 @@ async function updateReadme (projectName, description) {
 }
 
 function getRawTokenFiles () {
-  return ['./app/views/home.njk', './app/views/_layout.template.njk', './.azuredevops/build.yaml']
+  return ['./app/views/home.njk', './.azuredevops/build.yaml']
 }
 async function removeRawTokens () {
   const filesToUpdate = getRawTokenFiles()
@@ -200,7 +205,7 @@ async function removeRawTokens () {
     filesToUpdate.map(async (file) => {
       console.log(file)
       const content = await fs.promises.readFile(file, 'utf8')
-      const rawToken = '{% raw %} {# Backstage scaffolder to render the file as is and to skip this content to interpret as template   #}'
+      const rawToken = '{% raw %}'
       const endRawToken = '{% endraw %}'
       const rawRegex = new RegExp(rawToken, 'g')
       const endRawRegex = new RegExp(endRawToken, 'g')
@@ -213,15 +218,45 @@ async function removeRawTokens () {
   console.log('Completed raw token removal.')
 }
 
+async function renderUiTypeLayoutTemplate (frontendType) {
+  console.log('Rendering template files for UI type:', frontendType)
+  const layoutFiles = [{ name: 'external', path: './app/views/_layout.external.template.njk' },
+    { name: 'internal', path: './app/views/_layout.internal.template.njk' },
+    { name: 'scaffolder', path: './app/views/_layout.scaffolder.template.njk' }
+  ]
+  const filesToRemove = layoutFiles.filter((x) => x.name !== frontendType).map((x) => x.path)
+  await removeFiles(filesToRemove)
+  const fileToRename = layoutFiles.filter((x) => x.name === frontendType)[0]
+  await renameFile(fileToRename)
+}
+
+async function removeFiles (files) {
+  console.log('Removing files not required for UI type')
+  await Promise.all(
+    files.map(async (file) => {
+      console.log(file)
+      return fs.promises.unlink(file)
+    })
+  )
+  console.log('Removing files completed')
+}
+
+async function renameFile (obj) {
+  console.log('Renaming file: ', obj.path)
+  const newPath = obj.path.replace(`.${obj.name}`, '')
+  await fs.promises.rename(obj.path, newPath)
+  console.log('Rename file completed to ', newPath)
+}
+
 async function rename () {
-  const { description, projectName, namespace, tokenize } = processInput(process.argv)
-  console.log('Tokenize: ', tokenize)
+  const { description, projectName, namespace, appType, tokenize } = processInput(process.argv)
   const rename = await confirmRename(projectName, description)
   if (rename) {
     await renameDirs(projectName)
     await updateProjectName(projectName, namespace)
     await updateProjectDescription(projectName, description)
     await updateReadme(projectName, description)
+    await renderUiTypeLayoutTemplate(appType)
     if (!tokenize) {
       await removeRawTokens()
     }

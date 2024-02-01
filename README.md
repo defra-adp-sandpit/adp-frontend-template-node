@@ -4,15 +4,16 @@ Template to support rapid delivery of microservices for ADP Platform. It contain
 
 ## Usage
 
-Create a new repository from this template and run `./rename.js` specifying the new name of the project and the description to use e.g.
+Create a new repository from this template and run `./rename.js` specifying the new name of the project, description and frontend type (internal/external)to use e.g.
 ```
-node rename.js ffc-demo-web "Web frontend for demo workstream"
+ node rename.js test-web-frontend 'test-web-frontend external' external
+ node rename.js test-web-frontend 'test-web-frontend internal' internal
 ```
 
 To update scaffolder software template for `adp-software-template` repository, use the below command running `rename.js`
 
 ```
-node rename.js '${{ values.project_name }}' '${{ values.project_description }}' true '${{ values.workstream }}'
+node rename.js '${{ values.project_name }}' '${{ values.project_description }}' '' true '${{ values.workstream }}'
 ```
 
 The script will update the following:
