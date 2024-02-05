@@ -7,13 +7,18 @@ module.exports = {
   coverageDirectory: 'test-output',
   coverageReporters: [
     'text-summary',
+    'cobertura',
     'lcov'
   ],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/',
+    '<rootDir>/app/dist/',
+    '<rootDir>/app/frontend/',
     '<rootDir>/test-output/',
     '<rootDir>/test/',
-    '<rootDir>/jest.config.js'
+    '<rootDir>/jest.config.js',
+    '<rootDir>/rename.js',
+    '<rootDir>/webpack.config.js'
   ],
   modulePathIgnorePatterns: [
     'node_modules'
